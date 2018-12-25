@@ -1,4 +1,8 @@
 # Created by .ignore support plugin (hsz.mobi)
+# IntelliJ project files
+.idea
+out
+gen
 ### Python template
 # Byte-compiled / optimized / DLL files
 __pycache__/
