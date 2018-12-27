@@ -14,6 +14,9 @@ class AdaCrawlSpider(CrawlSpider):
         "Referer": "https://login.xiami.com/member/login?spm=a1z1s.6843761.226669498.1.2iL1jx"
     }
 
+    # https://y.qq.com/portal/search.html#page=1&searchid=1&remoteplace=txt.yqq.top&t=song&w=%E5%91%A8%E6%9D%B0%E4%BC%A6
+    # https://y.qq.com/portal/search.html#page=1&searchid=1&remoteplace=txt.yqq.top&t=song&w=%E8%AE%B8%E5%B5%A9
+
     rules = (
         Rule(LinkExtractor(allow=r'Items/'), callback='parse_item', follow=True),
     )
