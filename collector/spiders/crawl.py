@@ -1,24 +1,30 @@
 # -*- coding: utf-8 -*-
+from urllib import parse
+
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 
 
 class AdaCrawlSpider(CrawlSpider):
+
+    def __init__(self, singer=None):
+        super(AdaCrawlSpider, self).__init__()
+        self.start_urls = [
+            'https://y.qq.com/portal/search.html#page=1&searchid=1&remoteplace=txt.yqq.top&t=song&%s'
+            % parse.urlencode({'w': singer})
+        ]
+
     name = 'Ada'
     allowed_domains = ['qq.com']
-    start_urls = ['https://y.qq.com/']
 
     headers = {
         "Accept": "application/json, text/javascript, */*; q=0.01",
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        "Referer": "https://login.xiami.com/member/login?spm=a1z1s.6843761.226669498.1.2iL1jx"
+        "Referer": "https://y.qq.com/portal/search.html"
     }
 
-    # https://y.qq.com/portal/search.html#page=1&searchid=1&remoteplace=txt.yqq.top&t=song&w=%E5%91%A8%E6%9D%B0%E4%BC%A6
-    # https://y.qq.com/portal/search.html#page=1&searchid=1&remoteplace=txt.yqq.top&t=song&w=%E8%AE%B8%E5%B5%A9
-
     rules = (
-        Rule(LinkExtractor(allow=r'Items/'), callback='parse_item', follow=True),
+        Rule(LinkExtractor(allow=r'https://y.qq.com/n/yqq/singer/.+'), callback='parse_item', follow=True),
     )
 
     # noinspection PyMethodMayBeStatic
@@ -27,4 +33,6 @@ class AdaCrawlSpider(CrawlSpider):
         # i['domain_id'] = response.xpath('//input[@id="sid"]/@value').extract()
         # i['name'] = response.xpath('//div[@id="name"]').extract()
         # i['description'] = response.xpath('//div[@id="description"]').extract()
+        with open("search2.html", 'wb') as f:
+            f.write(response.body)
         return i
