@@ -29,10 +29,10 @@ class AdaCrawlSpider(CrawlSpider):
 
     # noinspection PyMethodMayBeStatic
     def parse_item(self, response):
-        i = {}
+        with open("search2.html", 'wb') as f:
+            f.write(response.body)
+        # i = {}
         # i['domain_id'] = response.xpath('//input[@id="sid"]/@value').extract()
         # i['name'] = response.xpath('//div[@id="name"]').extract()
         # i['description'] = response.xpath('//div[@id="description"]').extract()
-        with open("search2.html", 'wb') as f:
-            f.write(response.body)
-        return i
+        # return i
