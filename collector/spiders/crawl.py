@@ -37,6 +37,10 @@ class AdaCrawlSpider(CrawlSpider):
         "Referer": "https://y.qq.com/portal/search.html"
     }
 
+    singer_url = 'https://y.qq.com/n/yqq/singer/{singer_mid}.html'
+    song_url = 'https://y.qq.com/n/yqq/song/{song_mid}.html'
+    mv_url = 'https://y.qq.com/n/yqq/mv/v/{song_vid}.html'
+
     page_idx = 1
     page_no = 20
 
@@ -45,13 +49,13 @@ class AdaCrawlSpider(CrawlSpider):
             p_page_idx=parse.urlencode({'p': self.page_idx}),
             n_page_no=parse.urlencode({'n': self.page_no}),
             w_singer=parse.urlencode({'w': self.__singer})
-        ), callback=self.parse)
+        ), callback=self.parse_singer)
 
     # rules = (
     #     Rule(LinkExtractor(allow=r'https://y.qq.com/n/yqq/singer/.+'), callback='parse_item', follow=True),
     # )
 
-    def parse(self, response):
+    def parse_singer(self, response):
         resp = response.body[34: -1]
         with open("%s.json" % self.__singer, 'wb') as f:
             f.write(resp)
@@ -59,29 +63,34 @@ class AdaCrawlSpider(CrawlSpider):
         singer = SingerItem()
         song = SongItem()
         # the difference between dict.get(key) and dict[key]
-        singer['id'] = result['data']['zhida']['zhida_singer']['singerID']
-        singer['mid'] = result['data']['zhida']['zhida_singer']['singerMID']
-        singer['name'] = result['data']['zhida']['zhida_singer']['singerName']
-        singer['pic'] = result['data']['zhida']['zhida_singer']['singerPic']
-        singer['album_num'] = result['data']['zhida']['zhida_singer']['albumNum']
-        singer['mv_num'] = result['data']['zhida']['zhida_singer']['mvNum']
-        singer['song_num'] = result['data']['zhida']['zhida_singer']['songNum']
-        singer['authorized2qq_num'] = result['data']['song']['totalnum']
+        singer['singer_id'] = result['data']['zhida']['zhida_singer']['singerID']
+        singer['singer_mid'] = result['data']['zhida']['zhida_singer']['singerMID']
+        singer['singer_name'] = result['data']['zhida']['zhida_singer']['singerName']
+        singer['singer_pic'] = result['data']['zhida']['zhida_singer']['singerPic']
+        singer['singer_album_num'] = result['data']['zhida']['zhida_singer']['albumNum']
+        singer['singer_mv_num'] = result['data']['zhida']['zhida_singer']['mvNum']
+        singer['singer_song_num'] = result['data']['zhida']['zhida_singer']['songNum']
+        singer['singer_authorized2qq_num'] = result['data']['song']['totalnum']
         yield singer
-        self.song_generator(song, result)
+        for i in self.song_generator(song, result):
+            yield scrapy.Request(self.song_url.format(singer_mid=i['song_mid']), callback=self.parse_song)
         # next page
-        for i in range(2, int(singer['authorized2qq_num'])//self.page_no + 2):
+        for i in range(2, int(singer['singer_authorized2qq_num']) // self.page_no + 2):
             yield scrapy.Request(self.start_urls[0].format(
                 p_page_idx=parse.urlencode({'p': i}),
                 n_page_no=parse.urlencode({'n': self.page_no}),
                 w_singer=parse.urlencode({'w': self.__singer})
             ), callback=self.parse)
 
+    def parse_song(self, response):
+
+        pass
+
     # noinspection PyMethodMayBeStatic
     def song_generator(self, song, result):
         for i in result['data']['song']['list']:
-            song['mid'] = i['mid']
-            song['name'] = i['name']
-            song['vid'] = i['mv']['vid']
-            song['publish'] = i['time_public']
+            song['song_mid'] = i['mid']
+            song['song_name'] = i['name']
+            song['song_vid'] = i['mv']['vid']
+            song['song_publish'] = i['time_public']
             yield song

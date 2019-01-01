@@ -15,23 +15,23 @@ class CollectorItem(scrapy.Item):
 
 
 class SingerItem(scrapy.Item):
-    id = scrapy.Field()
-    mid = scrapy.Field()
-    name = scrapy.Field()
-    pic = scrapy.Field()
-    album_num = scrapy.Field()
-    mv_num = scrapy.Field()
-    song_num = scrapy.Field()
-    authorized2qq_num = scrapy.Field()
+    singer_id = scrapy.Field()
+    singer_mid = scrapy.Field()
+    singer_name = scrapy.Field()
+    singer_pic = scrapy.Field()
+    singer_album_num = scrapy.Field()
+    singer_mv_num = scrapy.Field()
+    singer_song_num = scrapy.Field()
+    singer_authorized2qq_num = scrapy.Field()
     pass
 
 
 class SongItem(SingerItem):
-    mid = scrapy.Field()
-    name = scrapy.Field()
+    song_mid = scrapy.Field()
+    song_name = scrapy.Field()
     # mv
-    vid = scrapy.Field()
-    publish = scrapy.Field()
+    song_vid = scrapy.Field()
+    song_publish = scrapy.Field()
     pass
 
 
