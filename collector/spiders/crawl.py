@@ -23,7 +23,9 @@ class AdaCrawlSpider(CrawlSpider):
     allowed_domains = ['qq.com']
     start_urls = [
         'https://c.y.qq.com/soso/fcgi-bin/client_search_cp?ct=24&qqmusic_ver=0&new_json=1'
-        '&remoteplace=txt.yqq.center&searchid=0&t=0&aggr=1&cr=1&catZhida=1&lossless=0&flag_qc=0&p=1&n=20'
+        '&remoteplace=txt.yqq.center&searchid=0&t=0&aggr=1&cr=1&catZhida=1&lossless=0&flag_qc=0'
+        '&{p_page_idx}'
+        '&{n_page_no}'
         '&{w_singer}'
         '&g_tk=0&jsonpCallback=MusicJsonCallback9260186144153801&loginUin=0&hostUin=0'
         '&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewC',
@@ -35,9 +37,15 @@ class AdaCrawlSpider(CrawlSpider):
         "Referer": "https://y.qq.com/portal/search.html"
     }
 
+    page_idx = 1
+    page_no = 20
+
     def start_requests(self):
-        yield scrapy.Request(self.start_urls[0].format(w_singer=parse.urlencode({'w': self.__singer})),
-                             callback=self.parse)
+        yield scrapy.Request(self.start_urls[0].format(
+            p_page_idx=parse.urlencode({'p': self.page_idx}),
+            n_page_no=parse.urlencode({'n': self.page_no}),
+            w_singer=parse.urlencode({'w': self.__singer})
+        ), callback=self.parse)
 
     # rules = (
     #     Rule(LinkExtractor(allow=r'https://y.qq.com/n/yqq/singer/.+'), callback='parse_item', follow=True),
@@ -58,7 +66,19 @@ class AdaCrawlSpider(CrawlSpider):
         singer['album_num'] = result['data']['zhida']['zhida_singer']['albumNum']
         singer['mv_num'] = result['data']['zhida']['zhida_singer']['mvNum']
         singer['song_num'] = result['data']['zhida']['zhida_singer']['songNum']
+        singer['authorized2qq_num'] = result['data']['song']['totalnum']
         yield singer
+        self.song_generator(song, result)
+        # next page
+        for i in range(2, int(singer['authorized2qq_num'])//self.page_no + 2):
+            yield scrapy.Request(self.start_urls[0].format(
+                p_page_idx=parse.urlencode({'p': i}),
+                n_page_no=parse.urlencode({'n': self.page_no}),
+                w_singer=parse.urlencode({'w': self.__singer})
+            ), callback=self.parse)
+
+    # noinspection PyMethodMayBeStatic
+    def song_generator(self, song, result):
         for i in result['data']['song']['list']:
             song['mid'] = i['mid']
             song['name'] = i['name']

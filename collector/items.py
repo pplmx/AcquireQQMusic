@@ -22,6 +22,7 @@ class SingerItem(scrapy.Item):
     album_num = scrapy.Field()
     mv_num = scrapy.Field()
     song_num = scrapy.Field()
+    authorized2qq_num = scrapy.Field()
     pass
 
 
