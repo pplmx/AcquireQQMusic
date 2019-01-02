@@ -73,7 +73,8 @@ class AdaCrawlSpider(CrawlSpider):
         singer['singer_authorized2qq_num'] = result['data']['song']['totalnum']
         yield singer
         for i in self.song_generator(song, result):
-            yield scrapy.Request(self.song_url.format(singer_mid=i['song_mid']), callback=self.parse_song)
+            yield scrapy.Request(self.song_url.format(song_mid=i['song_mid']),
+                                 callback=self.parse_song(response=response, song=i))
         # next page
         for i in range(2, int(singer['singer_authorized2qq_num']) // self.page_no + 2):
             yield scrapy.Request(self.start_urls[0].format(
@@ -82,9 +83,12 @@ class AdaCrawlSpider(CrawlSpider):
                 w_singer=parse.urlencode({'w': self.__singer})
             ), callback=self.parse)
 
-    def parse_song(self, response):
-
-        pass
+    # noinspection PyMethodMayBeStatic
+    def parse_song(self, response, song):
+        resp = response.body[34: -1]
+        with open("%s.json" % song['song_name'], 'wb') as f:
+            f.write(resp)
+        result = json.loads(resp)
 
     # noinspection PyMethodMayBeStatic
     def song_generator(self, song, result):
