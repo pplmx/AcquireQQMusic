@@ -88,7 +88,6 @@ class AdaCrawlSpider(CrawlSpider):
         resp = response.body[34: -1]
         with open("%s.json" % song['song_name'], 'wb') as f:
             f.write(resp)
-        result = json.loads(resp)
 
     # noinspection PyMethodMayBeStatic
     def song_generator(self, song, result):
