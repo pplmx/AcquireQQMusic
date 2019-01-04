@@ -83,13 +83,11 @@ class AdaCrawlSpider(CrawlSpider):
                 w_singer=parse.urlencode({'w': self.__singer})
             ), callback=self.parse)
 
-    # noinspection PyMethodMayBeStatic
     def parse_song(self, response, song):
         resp = response.body[34: -1]
         with open("%s.json" % song['song_name'], 'wb') as f:
             f.write(resp)
 
-    # noinspection PyMethodMayBeStatic
     def song_generator(self, song, result):
         for i in result['data']['song']['list']:
             song['song_mid'] = i['mid']
