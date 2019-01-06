@@ -26,6 +26,7 @@ class SingerItem(scrapy.Item):
 
 
 class SongItem(SingerItem):
+    song_id = scrapy.Field()
     song_mid = scrapy.Field()
     song_name = scrapy.Field()
     # mv

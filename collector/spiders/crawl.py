@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
-import shelve
+import os
 from urllib import parse
 
 import scrapy
@@ -50,6 +50,10 @@ class AdaCrawlSpider(CrawlSpider):
                '&begin={list_start_idx}' \
                '&num={list_no}' \
                '&songstatus=1'
+    lyric_url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_yqq.fcg?nobase64=1' \
+                '&musicid={song_id}' \
+                '&-=jsonp1&g_tk=5381&loginUin=0&hostUin=0&format=json' \
+                '&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0'
 
     page_idx = 1
     page_no = 30
@@ -71,7 +75,8 @@ class AdaCrawlSpider(CrawlSpider):
             f.write(resp)
         result = json.loads(resp)
         singer = SingerItem()
-        song = SongItem()
+
+        # get singer's info
         # the difference between dict.get(key) and dict[key]
         singer['singer_id'] = result['data']['zhida']['zhida_singer']['singerID']
         singer['singer_mid'] = result['data']['zhida']['zhida_singer']['singerMID']
@@ -81,32 +86,51 @@ class AdaCrawlSpider(CrawlSpider):
         singer['singer_mv_num'] = result['data']['zhida']['zhida_singer']['mvNum']
         singer['singer_song_num'] = result['data']['zhida']['zhida_singer']['songNum']
 
-        with open('singer.json', 'a+') as f:
+        store_path = 'resources'
+        if not os.path.exists(store_path):
+            os.mkdir(store_path)
+        with open('resources/singer.json', 'a+') as f:
             # convert singer's attributes to dict, then write to file
             f.write(json.dumps(singer.__dict__) + '\n')
-        for i in self.song_generator(song, result):
-            yield scrapy.Request(self.song_url.format(song_mid=i['song_mid']),
-                                 callback=self.parse_song(response=response, song=i))
-        # next page
-        for i in range(2, int(singer['singer_song_num']) // self.page_no + 2):
-            yield scrapy.Request(self.start_urls[0].format(
-                p_page_idx=parse.urlencode({'p': i}),
-                n_page_no=parse.urlencode({'n': self.page_no}),
-                w_singer=parse.urlencode({'w': self.__singer}),
-                # FIXME need to change parse to parse_singer
-            ), callback=self.parse)
+
+        # basing singer's info, to traverse all songs
+        for i in range(1, int(singer['singer_song_num']) // self.page_no + 2):
+            yield scrapy.Request(self.page_url.format(
+                singer_mid=singer['singer_mid'],
+                list_start_idx=(i - 1) * self.page_no,
+                list_no=self.page_no,
+            ), meta={'singer': singer['singer_name'], 'page_idx': i}, callback=self.parse_song_page)
+
+    def parse_song_page(self, response):
+        store_path = 'resources/singer/%s' % response.meta['singer']
+        if not os.path.exists(store_path):
+            os.mkdir(store_path)
+        with open("%s/%s-page-%s.json"
+                  % (store_path, response.meta['singer'], response.meta['page_idx']), 'wb') as f:
+            f.write(response.body)
+        for i in self.song_generator(response.body):
+            yield scrapy.Request(self.lyric_url.format(song_id=i['song_id']),
+                                 meta={'song_name': i['song_name'],
+                                       'singer': response.meta['singer']
+                                       },
+                                 callback=self.parse_lyric)
 
     @staticmethod
-    def parse_song(response, song):
-        resp = response.body[34: -1]
-        with open("%s.json" % song['song_name'], 'wb') as f:
-            f.write(resp)
+    def parse_lyric(response):
+        store_path = 'resources/lyric/%s' % response.meta['singer']
+        if not os.path.exists(store_path):
+            os.mkdir(store_path)
+        with open("%s/%s.json" % (store_path, response.meta['song_name']), 'wb') as f:
+            f.write(response.body)
+        pass
 
     @staticmethod
-    def song_generator(song, result):
-        for i in result['data']['song']['list']:
-            song['song_mid'] = i['mid']
-            song['song_name'] = i['name']
-            song['song_vid'] = i['mv']['vid']
-            song['song_publish'] = i['time_public']
+    def song_generator(resp):
+        song = SongItem()
+        resp = json.loads(resp)
+        for i in resp['data']['list']:
+            song['song_id'] = i['musicData']['songid']
+            song['song_mid'] = i['musicData']['songmid']
+            song['song_name'] = i['musicData']['songname']
+            song['song_vid'] = i['musicData']['vid']
             yield song
