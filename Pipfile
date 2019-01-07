@@ -1,8 +1,11 @@
 [[source]]
-name = "tsing"
-#url = "http://mirrors.aliyun.com/pypi/simple/"
+name = "tsinghua"
 url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 verify_ssl = true
+
+[[source]]
+name = "aliyun"
+url = "http://mirrors.aliyun.com/pypi/simple"
 
 [dev-packages]
 
