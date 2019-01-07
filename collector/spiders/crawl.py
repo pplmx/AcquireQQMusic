@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 import os
+import re
 from urllib import parse
 
 import scrapy
@@ -71,8 +72,6 @@ class AdaCrawlSpider(CrawlSpider):
 
     def parse_singer(self, response):
         resp = response.body[34: -1]
-        with open("%s.json" % self.__singer, 'wb') as f:
-            f.write(resp)
         result = json.loads(resp)
         singer = SingerItem()
 
@@ -122,7 +121,15 @@ class AdaCrawlSpider(CrawlSpider):
             os.mkdir(store_path)
         with open("%s/%s.json" % (store_path, response.meta['song_name']), 'wb') as f:
             f.write(response.body)
-        pass
+        lyric_json = json.loads(response.body)
+        if 'lyric' in dict(lyric_json).keys():
+            lyric = re.sub(r'&#10;\[.*?\]', ' ', lyric_json['lyric'])
+            pattern_ = r'(00|ti|Chaque|individu|est|un|arbre|Sa|racine|ancré|terre|' \
+                       r'trangers|partout|Tandis|dans|la|que|esprit|son|Nous|somme|' \
+                       r'erre|lesé|tous|de)?&#\d+;(\d+)?'
+            lyric = re.sub(pattern_, ' ', lyric)
+            with open('%s/%s.txt' % (store_path, response.meta['singer']), 'a+', encoding='utf-8') as f:
+                f.write(lyric + '\n', )
 
     @staticmethod
     def song_generator(resp):
