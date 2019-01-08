@@ -129,7 +129,7 @@ class AdaCrawlSpider(CrawlSpider):
                        r'erre|lesé|tous|de)?&#\d+;(\d+)?'
             lyric = re.sub(pattern_, ' ', lyric)
             with open('%s/%s.txt' % (store_path, response.meta['singer']), 'a+', encoding='utf-8') as f:
-                f.write(lyric + '\n', )
+                f.write(lyric + '\n')
 
     @staticmethod
     def song_generator(resp):
