@@ -3,7 +3,6 @@
 # @author  : mystic
 # @date    : 1/9/2019 21:05
 import jieba
-import nltk
 
 import jieba.analyse
 
