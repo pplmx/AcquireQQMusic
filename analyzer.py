@@ -5,6 +5,7 @@
 import jieba
 
 import jieba.analyse
+import nltk
 
 
 def analysis():
@@ -15,10 +16,10 @@ def analysis():
                 lyric.append(t)
         text = jieba.analyse.extract_tags(f.read(), topK=20, withWeight=False, allowPOS=())
     print(text)
-    # frequent = nltk.FreqDist(lyric)
-    # for key, val in frequent.items():
-    #     print('%s=======%s' % (key, val))
-    # frequent.plot(20, cumulative=False)
+    frequent = nltk.FreqDist(lyric)
+    for key, val in frequent.items():
+        print('%s=======%s' % (key, val))
+    frequent.plot(20, cumulative=False)
 
 
 if __name__ == '__main__':
