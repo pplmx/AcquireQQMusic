@@ -15,11 +15,7 @@ def analysis():
             for t in line.split():
                 lyric.append(t)
         text = jieba.analyse.extract_tags(f.read(), topK=20, withWeight=False, allowPOS=())
-    print(text)
-    frequent = nltk.FreqDist(lyric)
-    for key, val in frequent.items():
-        print('%s=======%s' % (key, val))
-    frequent.plot(20, cumulative=False)
+    parser = nltk.CoreNLPParser('http://localhost:9001')
 
 
 if __name__ == '__main__':
