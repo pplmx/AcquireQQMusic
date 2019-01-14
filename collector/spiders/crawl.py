@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import html
 import json
 import os
 import re
@@ -123,13 +124,10 @@ class AdaCrawlSpider(CrawlSpider):
             f.write(response.body)
         lyric_json = json.loads(response.body)
         if 'lyric' in dict(lyric_json).keys():
-            lyric = re.sub(r'&#10;\[.*?\]', ' ', lyric_json['lyric'])
-            pattern_ = r'(00|ti|Chaque|individu|est|un|arbre|Sa|racine|ancré|terre|' \
-                       r'trangers|partout|Tandis|dans|la|que|esprit|son|Nous|somme|' \
-                       r'erre|lesé|tous|de)?&#\d+;(\d+)?'
-            lyric = re.sub(pattern_, ' ', lyric)
+            lyric = html.unescape(lyric_json['lyric'])
+            # lyric = re.sub(r'[\r\n\f]{2,}', '', lyric)
             with open('%s/%s.txt' % (store_path, response.meta['singer']), 'a+', encoding='utf-8') as f:
-                f.write(lyric + '\n')
+                f.write(lyric + '\n[===Next Song to Start===]\n')
 
     @staticmethod
     def song_generator(resp):
