@@ -124,8 +124,14 @@ class AdaCrawlSpider(CrawlSpider):
             f.write(response.body)
         lyric_json = json.loads(response.body)
         if 'lyric' in dict(lyric_json).keys():
+            # html decode
             lyric = html.unescape(lyric_json['lyric'])
-            # lyric = re.sub(r'[\r\n\f]{2,}', '', lyric)
+            # remove time info , such as [00:03.24]
+            lyric = re.sub(r'\[\d{2}:\d{2}.\d{2}\]', '', lyric)
+            # remove not lyric
+            lyric = re.sub(u'此歌曲为没有填词的纯音乐，请您欣赏', '', lyric)
+            # remove redundant empty line
+            lyric = re.sub(r'([\r\n]{2,})|((\r\n){2,})', '\n', lyric)
             with open('%s/%s.txt' % (store_path, response.meta['singer']), 'a+', encoding='utf-8') as f:
                 f.write(lyric + '\n[===Next Song to Start===]\n')
 
