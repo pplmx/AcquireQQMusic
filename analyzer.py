@@ -5,17 +5,20 @@
 import jieba
 
 import jieba.analyse
-import nltk
+from nltk.parse import corenlp
 
 
 def analysis():
     lyric = []
     with open('resources/lyric/木小雅/木小雅.txt', 'r', encoding='utf-8') as f:
         for line in f.readlines():
-            for t in line.split():
+            line = line.strip()
+            if line == 'NextSong2start':
+                continue
+            for t in line.strip().split():
                 lyric.append(t)
         text = jieba.analyse.extract_tags(f.read(), topK=20, withWeight=False, allowPOS=())
-    parser = nltk.CoreNLPParser('http://localhost:9001')
+    parser = corenlp.CoreNLPParser('http://localhost:9001')
 
 
 if __name__ == '__main__':

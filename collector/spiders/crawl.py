@@ -133,7 +133,7 @@ class AdaCrawlSpider(CrawlSpider):
             # remove redundant empty line
             lyric = re.sub(r'([\r\n]{2,})|((\r\n){2,})', '\n', lyric)
             with open('%s/%s.txt' % (store_path, response.meta['singer']), 'a+', encoding='utf-8') as f:
-                f.write(lyric + '\n[===Next Song to Start===]\n')
+                f.write(lyric + '\nNextSong2start\n')
 
     @staticmethod
     def song_generator(resp):
