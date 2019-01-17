@@ -19,6 +19,7 @@ def analysis():
                 lyric.append(t)
         text = jieba.analyse.extract_tags(f.read(), topK=20, withWeight=False, allowPOS=())
     parser = corenlp.CoreNLPParser('http://localhost:9001')
+    parser.tokenize(lyric)
 
 
 if __name__ == '__main__':
