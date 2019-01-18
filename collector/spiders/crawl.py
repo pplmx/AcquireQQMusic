@@ -128,12 +128,14 @@ class AdaCrawlSpider(CrawlSpider):
             lyric = html.unescape(lyric_json['lyric'])
             # remove time info , such as [00:03.24]
             lyric = re.sub(r'\[\d{2}:\d{2}.\d{2}\]', '', lyric)
+            # remove some sign
+            lyric = re.sub(r'(\[ti:)|(\[ar:)|(\[al:)|(\[by:)|(\[offset:\d*\])|(\[)|(\])', '', lyric)
             # remove not lyric
             lyric = re.sub(u'此歌曲为没有填词的纯音乐，请您欣赏', '', lyric)
             # remove redundant empty line
             lyric = re.sub(r'([\r\n]{2,})|((\r\n){2,})', '\n', lyric)
             with open('%s/%s.txt' % (store_path, response.meta['singer']), 'a+', encoding='utf-8') as f:
-                f.write(lyric + '\nNextSong2start\n')
+                f.write(lyric + '\n\n\n\n')
 
     @staticmethod
     def song_generator(resp):
