@@ -18,6 +18,8 @@ nltk = "*"
 scrapy = "*"
 pypiwin32 = "*"
 jieba = "*"
+bosonnlp = "*"
+pyhanlp = "*"
 
 [requires]
 python_version = "3.7"

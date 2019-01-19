@@ -4,8 +4,8 @@
 # @date    : 1/9/2019 21:05
 import re
 
+import jieba
 import nltk
-from nltk.corpus import stopwords
 from nltk.parse import corenlp
 
 # common sign
@@ -21,10 +21,10 @@ def analysis():
         lyric = list(parser.tokenize(f.read()))
         # filter common sign
         lyric = list(filter(lambda x: not re.match(SIGN_PATTERN, x), lyric))
-        stoplist = stopwords.words('english')
-        print(lyric)
+        # word frequency
         result = nltk.FreqDist(lyric)
         print(result.most_common(10))
+        jieba.tokenize(f.read())
 
 
 if __name__ == '__main__':
