@@ -6,7 +6,7 @@ import re
 
 import jieba
 import nltk
-from nltk.parse import corenlp
+import pyhanlp
 
 # common sign
 SIGN_PATTERN = r'[\s+.!/_,$%^*()"?<>:;\[\]\']+|[：\-+—=！，；“”|。？、~@#￥%…&*（）{}【】《》]'
@@ -15,7 +15,7 @@ CHINESE_STOP_WORDS = ['的', '地']
 
 
 def analysis():
-    parser = corenlp.CoreNLPParser('http://localhost:9001')
+    parser = nltk.corenlp.CoreNLPParser('http://localhost:9001')
     with open('resources/lyric/木小雅/木小雅.txt', 'r', encoding='utf-8') as f:
         # to split chinese sentence to word
         lyric = list(parser.tokenize(f.read()))
@@ -25,6 +25,10 @@ def analysis():
         result = nltk.FreqDist(lyric)
         print(result.most_common(10))
         jieba.tokenize(f.read())
+        naive_bayes_classifier = pyhanlp.JClass('com.hankcs.hanlp.classification.classifiers.NaiveBayesClassifier')
+        naive_bayes_classifier = pyhanlp.SafeJClass('com.hankcs.hanlp.classification.classifiers.NaiveBayesClassifier')
+        naive_bayes_classifier = pyhanlp.LazyLoadingJClass('com.hankcs.hanlp.classification.classifiers.NaiveBayesClassifier')
+        print(pyhanlp.HanLP.segment('你好，欢迎在Python中调用HanLP的API'))
 
 
 if __name__ == '__main__':
