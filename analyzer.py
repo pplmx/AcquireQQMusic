@@ -8,6 +8,8 @@ import jieba
 import nltk
 import pyhanlp
 
+from nltk.corpus import sinica_treebank
+
 # common sign
 SIGN_PATTERN = r'[\s+.!/_,$%^*()"?<>:;\[\]\']+|[：\-+—=！，；“”|。？、~@#￥%…&*（）{}【】《》]'
 # stop words
@@ -22,8 +24,8 @@ def analysis():
         # lyric = list(parser.tokenize(f.read()))
 
         # jieba
-        # return generator, so convert to list
-        lyric = list(jieba.tokenize(f.read()))
+        # return generator (text, start_idx, end_idx)
+        lyric = jieba.tokenize(f.read())
         # return the list of tuple, so map it
         lyric = list(map(lambda x: x[0], lyric))
 
@@ -48,6 +50,7 @@ def analysis():
         # filter common sign
         lyric = list(filter(lambda x: not re.match(SIGN_PATTERN, x), lyric))
         print(nltk.FreqDist(lyric).most_common(10))
+
 
 
 if __name__ == '__main__':
