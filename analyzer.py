@@ -6,9 +6,6 @@ import re
 
 import jieba
 import nltk
-import pyhanlp
-
-from nltk.corpus import sinica_treebank
 
 # common sign
 SIGN_PATTERN = r'[\s+.!/_,$%^*()"?<>:;\[\]\']+|[：\-+—=！，；“”|。？、~@#￥%…&*（）{}【】《》]'
@@ -50,7 +47,6 @@ def analysis():
         # filter common sign
         lyric = list(filter(lambda x: not re.match(SIGN_PATTERN, x), lyric))
         print(nltk.FreqDist(lyric).most_common(10))
-
 
 
 if __name__ == '__main__':
