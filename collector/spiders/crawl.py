@@ -128,6 +128,10 @@ class AdaCrawlSpider(CrawlSpider):
             lyric = html.unescape(lyric_json['lyric'])
             # remove time info , such as [00:03.24]
             lyric = re.sub(r'\[\d{2}:\d{2}.\d{2}\]', '', lyric)
+            # replace &apos; with '
+            lyric = re.sub(r'&apos;', '\'', lyric)
+            # replace &amp; with &
+            lyric = re.sub(r'&amp;', '&', lyric)
             # remove some sign
             lyric = re.sub(r'(\[ti:)|(\[ar:)|(\[al:)|(\[by:)|(\[offset:\d*\])|(\[)|(\])', '', lyric)
             # remove not lyric

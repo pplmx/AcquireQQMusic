@@ -78,6 +78,10 @@ class CollectorDownloaderMiddleware(object):
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
+
+        from collector.UA.user_agent import USER_AGENTS
+        from numpy import random
+        request.headers.setdefault('User-Agent', random.choice(USER_AGENTS))
         return None
 
     def process_response(self, request, response, spider):
