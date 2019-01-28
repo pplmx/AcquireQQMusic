@@ -86,12 +86,12 @@ class AdaCrawlSpider(CrawlSpider):
         singer['singer_mv_num'] = result['data']['zhida']['zhida_singer']['mvNum']
         singer['singer_song_num'] = result['data']['zhida']['zhida_singer']['songNum']
 
-        store_path = 'resources'
-        if not os.path.exists(store_path):
-            os.mkdir(store_path)
-        with open('resources/singer.json', 'a+') as f:
-            # convert singer's attributes to dict, then write to file
-            f.write(json.dumps(singer.__dict__) + '\n')
+        # store_path = 'resources'
+        # if not os.path.exists(store_path):
+        #     os.mkdir(store_path)
+        # with open('resources/singer.json', 'a+') as f:
+        #     # convert singer's attributes to dict, then write to file
+        #     f.write(json.dumps(singer.__dict__) + '\n')
 
         # basing singer's info, to traverse all songs
         for i in range(1, int(singer['singer_song_num']) // self.page_no + 2):
@@ -102,12 +102,12 @@ class AdaCrawlSpider(CrawlSpider):
             ), meta={'singer': singer['singer_name'], 'page_idx': i}, callback=self.parse_song_page)
 
     def parse_song_page(self, response):
-        store_path = 'resources/singer/%s' % response.meta['singer']
-        if not os.path.exists(store_path):
-            os.mkdir(store_path)
-        with open("%s/%s-page-%s.json"
-                  % (store_path, response.meta['singer'], response.meta['page_idx']), 'wb') as f:
-            f.write(response.body)
+        # store_path = 'resources/singer/%s' % response.meta['singer']
+        # if not os.path.exists(store_path):
+        #     os.mkdir(store_path)
+        # with open("%s/%s-page-%s.json"
+        #           % (store_path, response.meta['singer'], response.meta['page_idx']), 'wb') as f:
+        #     f.write(response.body)
         for i in self.song_generator(response.body):
             yield scrapy.Request(self.lyric_url.format(song_id=i['song_id']),
                                  meta={'song_name': i['song_name'],
@@ -120,8 +120,6 @@ class AdaCrawlSpider(CrawlSpider):
         store_path = 'resources/lyric/%s' % response.meta['singer']
         if not os.path.exists(store_path):
             os.mkdir(store_path)
-        # with open("%s/%s.json" % (store_path, response.meta['song_name']), 'wb') as f:
-        #     f.write(response.body)
         lyric_json = json.loads(response.body)
         if 'lyric' in dict(lyric_json).keys():
             # html decode
