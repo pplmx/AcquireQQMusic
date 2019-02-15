@@ -47,7 +47,7 @@ def analysis():
         # filter common sign
         lyric = list(filter(lambda x: not re.match(SIGN_PATTERN, x), lyric))
         # filter single chinese word
-        lyric = list(filter(lambda x: len(x) > 1, lyric))
+        # lyric = list(filter(lambda x: len(x) > 1, lyric))
         # filter defined stop words
         lyric = [i for i in lyric if i not in STOP_WORDS]
         print(nltk.FreqDist(lyric).most_common(10))
