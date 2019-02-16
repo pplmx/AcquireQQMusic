@@ -10,7 +10,7 @@ import nltk
 # common sign
 SIGN_PATTERN = r'[\s+.!/_,$%^*()"?<>:;\[\]\']+|[：\-+—=！，；“”|。？、~@#￥%…&*（）{}【】《》]'
 # stop words
-STOP_WORDS = {'陈奕迅', 'Eason', 'Chan'}
+STOP_WORDS = {'陈奕迅', 'Eason', 'Chan', '曲', '词', '的', '在', '了', '是'}
 
 
 def analysis():
@@ -50,7 +50,7 @@ def analysis():
         # lyric = list(filter(lambda x: len(x) > 1, lyric))
         # filter defined stop words
         lyric = [i for i in lyric if i not in STOP_WORDS]
-        print(nltk.FreqDist(lyric).most_common(10))
+        print(nltk.FreqDist(lyric).most_common(20))
 
 
 if __name__ == '__main__':
