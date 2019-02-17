@@ -23,6 +23,8 @@ pyhanlp = "*"
 fake-useragent = "*"
 wordcloud = "*"
 matplotlib = "*"
+scipy = "*"
+imageio = "*"
 
 [requires]
 python_version = "3.7"

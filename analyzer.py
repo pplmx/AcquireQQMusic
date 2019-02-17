@@ -4,15 +4,16 @@
 # @date    : 1/9/2019 21:05
 import re
 
+import imageio
 import jieba
 import matplotlib.pyplot as plt
 import nltk
-from wordcloud import WordCloud, ImageColorGenerator, STOPWORDS, wordcloud
+from wordcloud import WordCloud, ImageColorGenerator, STOPWORDS
 
 # common sign
 SIGN_PATTERN = r'[\s+.!/_,$%^*()"?<>:;\[\]\']+|[：\-+—=！，；“”|。？、~@#￥%…&*（）{}【】《》]'
 # stop words
-STOP_WORDS = {'陈奕迅', 'Eason', 'Chan', '曲', '词', '的', '在', '了', '是'}
+STOP_WORDS = {'陈奕迅', 'Eason', 'Chan', 'Eric', '黄伟文', 'Live', '曲', '词', '的', '在', '了', '是'}
 
 
 def analysis():
@@ -49,38 +50,39 @@ def analysis():
         # filter common sign
         lyric = list(filter(lambda x: not re.match(SIGN_PATTERN, x), lyric))
         # filter single chinese word
-        # lyric = list(filter(lambda x: len(x) > 1, lyric))
+        lyric = list(filter(lambda x: len(x) > 1, lyric))
         # filter defined stop words
         lyric = [i for i in lyric if i not in STOP_WORDS]
         # take the most common x elements
-        # lyric = nltk.FreqDist(lyric).most_common(200)
-        # lyric = [i[0] for i in lyric]
+        lyric = nltk.FreqDist(lyric).most_common()
+        print(len(lyric))
+        # filter somewhat frequency is not very high
+        lyric = list(filter(lambda tup: tup[1] > 100, lyric))
+        print(len(lyric))
 
-        back_color = plt.imread('background.jpg')  # 解析该图片
+        back_color = imageio.imread('background.jpg')  # 解析该图片
         wc = WordCloud(background_color='white',  # 背景颜色
-                       max_words=200,  # 最大词数
-                       mask=back_color,  # 以该参数值作图绘制词云，这个参数不为空时，width和height会被忽略
-                       max_font_size=100,  # 显示字体的最大值
-                       stopwords=STOPWORDS.add('苟利国'),  # 使用内置的屏蔽词，再添加'苟利国'
+                       max_words=100,  # 最大词数
+                       # mask=back_color,  # 以该参数值作图绘制词云，这个参数不为空时，width和height会被忽略
+                       max_font_size=1000,  # 显示字体的最大值
+                       stopwords=set(),  # 使用内置的屏蔽词，再添加'苟利国'
                        font_path="C:/Windows/Fonts/STFANGSO.ttf",  # 解决显示口字型乱码问题，可进入C:/Windows/Fonts/目录更换字体
                        random_state=42,  # 为每个词返回一个PIL颜色
-                       # width=1000,  # 图片的宽
-                       # height=860  #图片的长
+                       width=3840,  # 图片的宽
+                       height=2160  # 图片的长
                        )
-        wc.generate(' '.join(lyric))
-        # 基于彩色图像生成相应彩色
+        wc.generate_from_frequencies(dict(lyric))
+        # basing image to generate color
         image_colors = ImageColorGenerator(back_color)
-        # 显示图片
-        plt.imshow(wc.recolor(color_func=image_colors))
-        # 关闭坐标轴
+
+        plt.figure()
+        # show image
+        plt.imshow(wc, interpolation='bilinear')
+        # close axis
         plt.axis('off')
         plt.show()
 
-        # 绘制词云
-        plt.figure()
-        plt.imshow(wc.recolor(color_func=image_colors))
-        plt.axis('off')
-        # 保存图片
+        # save wordcloud
         wc.to_file('wordcloud4.jpg')
 
 
