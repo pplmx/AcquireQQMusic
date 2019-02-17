@@ -5,7 +5,9 @@
 import re
 
 import jieba
+import matplotlib.pyplot as plt
 import nltk
+from wordcloud import WordCloud, ImageColorGenerator, STOPWORDS, wordcloud
 
 # common sign
 SIGN_PATTERN = r'[\s+.!/_,$%^*()"?<>:;\[\]\']+|[：\-+—=！，；“”|。？、~@#￥%…&*（）{}【】《》]'
@@ -50,7 +52,36 @@ def analysis():
         # lyric = list(filter(lambda x: len(x) > 1, lyric))
         # filter defined stop words
         lyric = [i for i in lyric if i not in STOP_WORDS]
-        print(nltk.FreqDist(lyric).most_common(20))
+        # take the most common x elements
+        # lyric = nltk.FreqDist(lyric).most_common(200)
+        # lyric = [i[0] for i in lyric]
+
+        back_color = plt.imread('background.jpg')  # 解析该图片
+        wc = WordCloud(background_color='white',  # 背景颜色
+                       max_words=200,  # 最大词数
+                       mask=back_color,  # 以该参数值作图绘制词云，这个参数不为空时，width和height会被忽略
+                       max_font_size=100,  # 显示字体的最大值
+                       stopwords=STOPWORDS.add('苟利国'),  # 使用内置的屏蔽词，再添加'苟利国'
+                       font_path="C:/Windows/Fonts/STFANGSO.ttf",  # 解决显示口字型乱码问题，可进入C:/Windows/Fonts/目录更换字体
+                       random_state=42,  # 为每个词返回一个PIL颜色
+                       # width=1000,  # 图片的宽
+                       # height=860  #图片的长
+                       )
+        wc.generate(' '.join(lyric))
+        # 基于彩色图像生成相应彩色
+        image_colors = ImageColorGenerator(back_color)
+        # 显示图片
+        plt.imshow(wc.recolor(color_func=image_colors))
+        # 关闭坐标轴
+        plt.axis('off')
+        plt.show()
+
+        # 绘制词云
+        plt.figure()
+        plt.imshow(wc.recolor(color_func=image_colors))
+        plt.axis('off')
+        # 保存图片
+        wc.to_file('wordcloud4.jpg')
 
 
 if __name__ == '__main__':

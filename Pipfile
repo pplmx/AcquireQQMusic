@@ -21,6 +21,8 @@ jieba = "*"
 bosonnlp = "*"
 pyhanlp = "*"
 fake-useragent = "*"
+wordcloud = "*"
+matplotlib = "*"
 
 [requires]
 python_version = "3.7"
