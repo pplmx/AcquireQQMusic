@@ -8,12 +8,46 @@ import imageio
 import jieba
 import matplotlib.pyplot as plt
 import nltk
-from wordcloud import WordCloud, ImageColorGenerator, STOPWORDS
+from wordcloud import WordCloud
+
+# show Chinese word
+plt.rcParams['font.sans-serif'] = ['SimHei']
+# show plus and minus sign
+plt.rcParams['axes.unicode_minus'] = False
 
 # common sign
 SIGN_PATTERN = r'[\s+.!/_,$%^*()"?<>:;\[\]\']+|[：\-+—=！，；“”|。？、~@#￥%…&*（）{}【】《》]'
 # stop words
 STOP_WORDS = {'陈奕迅', 'Eason', 'Chan', 'Eric', '黄伟文', 'Live', '曲', '词', '的', '在', '了', '是'}
+
+
+def draw_histogram(data: list, x_desc: str, y_desc: str, title: str):
+    """
+        draw histogram based on word frequency
+    :param data: such as [('没有', 872), ('一个', 675), ('什么', 580)]
+    :param x_desc: to describe x axis info
+    :param y_desc: to describe y axis info
+    :param title:
+    :return:
+    """
+    # create histogram
+    plt.bar(range(len(data)), [i[1] for i in data], align='center')
+
+    # set x axis
+    plt.xticks(range(len(data)), [i[0] for i in data])
+
+    # set x axis desc
+    plt.xlabel(x_desc)
+
+    # set y axis desc
+    plt.ylabel(y_desc)
+
+    # set title
+    plt.title(title)
+
+    # show
+    plt.show()
+    pass
 
 
 def analysis():
@@ -54,16 +88,18 @@ def analysis():
         # filter defined stop words
         lyric = [i for i in lyric if i not in STOP_WORDS]
         # take the most common x elements
+        # [('没有', 872), ('一个', 675), ('什么', 580)]
         lyric = nltk.FreqDist(lyric).most_common()
+        draw_histogram(lyric[:10], x_desc='The Most Frequent Words', y_desc='Words Frequency', title='Words Frequency')
         print(len(lyric))
         # filter somewhat frequency is not very high
-        lyric = list(filter(lambda tup: tup[1] > 100, lyric))
+        lyric = list(filter(lambda tup: tup[1] > 10, lyric))
         print(len(lyric))
 
-        back_color = imageio.imread('background.jpg')  # 解析该图片
+        back_color = imageio.imread('blue-cat.jpg')  # 解析该图片
         wc = WordCloud(background_color='white',  # 背景颜色
-                       max_words=100,  # 最大词数
-                       # mask=back_color,  # 以该参数值作图绘制词云，这个参数不为空时，width和height会被忽略
+                       max_words=1000,  # 最大词数
+                       mask=back_color,  # 以该参数值作图绘制词云，这个参数不为空时，width和height会被忽略
                        max_font_size=1000,  # 显示字体的最大值
                        stopwords=set(),  # 使用内置的屏蔽词，再添加'苟利国'
                        font_path="C:/Windows/Fonts/STFANGSO.ttf",  # 解决显示口字型乱码问题，可进入C:/Windows/Fonts/目录更换字体
@@ -72,18 +108,17 @@ def analysis():
                        height=2160  # 图片的长
                        )
         wc.generate_from_frequencies(dict(lyric))
-        # basing image to generate color
-        image_colors = ImageColorGenerator(back_color)
-
-        plt.figure()
-        # show image
-        plt.imshow(wc, interpolation='bilinear')
-        # close axis
-        plt.axis('off')
-        plt.show()
-
         # save wordcloud
-        wc.to_file('wordcloud4.jpg')
+        wc.to_file('wordcloud3.jpg')
+
+        # show image
+        # plt.figure()
+        # # basing image to generate color
+        # image_colors = ImageColorGenerator(back_color)
+        # plt.imshow(wc.recolor(color_func=image_colors), interpolation='bilinear')
+        # # close axis
+        # plt.axis('off')
+        # plt.show()
 
 
 if __name__ == '__main__':
