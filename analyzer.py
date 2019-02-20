@@ -96,7 +96,7 @@ def analysis():
         lyric = list(filter(lambda tup: tup[1] > 10, lyric))
         print(len(lyric))
 
-        back_color = imageio.imread('blue-cat.jpg')  # 解析该图片
+        back_color = imageio.imread('Saber1.jpg')  # 解析该图片
         wc = WordCloud(background_color='white',  # 背景颜色
                        max_words=1000,  # 最大词数
                        mask=back_color,  # 以该参数值作图绘制词云，这个参数不为空时，width和height会被忽略
@@ -109,7 +109,7 @@ def analysis():
                        )
         wc.generate_from_frequencies(dict(lyric))
         # save wordcloud
-        wc.to_file('wordcloud3.jpg')
+        wc.to_file('Saber1-wc.jpg')
 
         # show image
         # plt.figure()
