@@ -91,10 +91,10 @@ def analysis():
         # [('没有', 872), ('一个', 675), ('什么', 580)]
         lyric = nltk.FreqDist(lyric).most_common()
         draw_histogram(lyric[:10], x_desc='The Most Frequent Words', y_desc='Words Frequency', title='Words Frequency')
-        # print(len(lyric))
+        print(len(lyric))
         # filter somewhat frequency is not very high
         lyric = list(filter(lambda tup: tup[1] > 10, lyric))
-        # print(len(lyric))
+        print(len(lyric))
 
         back_color = imageio.imread('Saber1.jpg')  # 解析该图片
         wc = WordCloud(background_color='white',  # 背景颜色
