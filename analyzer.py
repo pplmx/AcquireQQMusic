@@ -21,16 +21,21 @@ SIGN_PATTERN = r'[\s+.!/_,$%^*()"?<>:;\[\]\']+|[：\-+—=！，；“”|。？
 STOP_WORDS = {'陈奕迅', 'Eason', 'Chan', 'Eric', '黄伟文', 'Live', '曲', '词', '的', '在', '了', '是'}
 
 
-def draw_histogram(data: list, x_desc: str, y_desc: str, title: str):
+def draw_histogram(data: list, x_desc: str, y_desc: str, title: str, data2=None):
     """
         draw histogram based on word frequency
     :param data: such as [('没有', 872), ('一个', 675), ('什么', 580)]
     :param x_desc: to describe x axis info
     :param y_desc: to describe y axis info
     :param title:
+    :param data2: control group, like as data
     :return:
     """
     # create histogram
+    plt.bar(range(len(data)), [i[1] for i in data], align='center')
+    if data2 is not None:
+        # to do
+        pass
     plt.bar(range(len(data)), [i[1] for i in data], align='center')
 
     # set x axis
