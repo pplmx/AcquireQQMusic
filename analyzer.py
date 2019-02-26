@@ -116,15 +116,6 @@ def analysis():
         # save wordcloud
         wc.to_file('Saber1-wc.jpg')
 
-        # show image
-        # plt.figure()
-        # # basing image to generate color
-        # image_colors = ImageColorGenerator(back_color)
-        # plt.imshow(wc.recolor(color_func=image_colors), interpolation='bilinear')
-        # # close axis
-        # plt.axis('off')
-        # plt.show()
-
 
 if __name__ == '__main__':
     analysis()
