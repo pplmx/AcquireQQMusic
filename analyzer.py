@@ -52,7 +52,6 @@ def draw_histogram(data: list, x_desc: str, y_desc: str, title: str, data2=None)
 
     # show
     plt.show()
-    pass
 
 
 def analysis():
