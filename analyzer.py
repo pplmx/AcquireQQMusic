@@ -91,7 +91,7 @@ def analysis():
         lyric = list(filter(lambda x: len(x) > 1, lyric))
         # filter defined stop words
         lyric = [i for i in lyric if i not in STOP_WORDS]
-        # take the most common x elements
+        # take the most common elements
         # [('没有', 872), ('一个', 675), ('什么', 580)]
         lyric = nltk.FreqDist(lyric).most_common()
         draw_histogram(lyric[:10], x_desc='The Most Frequent Words', y_desc='Words Frequency', title='Words Frequency')
