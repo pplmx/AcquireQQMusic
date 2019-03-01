@@ -18,7 +18,10 @@ plt.rcParams['axes.unicode_minus'] = False
 # common sign
 SIGN_PATTERN = r'[\s+.!/_,$%^*()"?<>:;\[\]\']+|[：\-+—=！，；“”|。？、~@#￥%…&*（）{}【】《》]'
 # stop words
-STOP_WORDS = {'陈奕迅', 'Eason', 'Chan', 'Eric', '黄伟文', 'Live', '曲', '词', '的', '在', '了', '是'}
+STOP_WORDS = {'陈奕迅', 'Eason', 'Chan', 'Eric', '黄伟文', 'Live',
+              '曲', '词', '的', '在', '了', '是', '都', '也', '这',
+              '要', '有', '人', '再', '就', '不', '着', '会', '到',
+              '让', '多', '又'}
 
 
 def draw_histogram(data: list, x_desc: str, y_desc: str, title: str, data2=None):
@@ -34,8 +37,13 @@ def draw_histogram(data: list, x_desc: str, y_desc: str, title: str, data2=None)
     # create histogram
     plt.bar(range(len(data)), [i[1] for i in data], align='center')
     if data2 is not None:
-        # to do
-        pass
+        # like [1, 3, 5] and [a, b, c], merged into [1, a, 3, b, 5, c]
+        if len(data) == len(data2):
+            temp = []
+            for idx, val in enumerate(data):
+                temp.append(val)
+                temp.append(data2[idx])
+            data = temp
     plt.bar(range(len(data)), [i[1] for i in data], align='center')
 
     # set x axis
@@ -88,13 +96,16 @@ def analysis():
         # filter common sign
         lyric = list(filter(lambda x: not re.match(SIGN_PATTERN, x), lyric))
         # filter single chinese word
+        lyric2 = list(filter(lambda x: len(x) == 1, lyric))
         lyric = list(filter(lambda x: len(x) > 1, lyric))
         # filter defined stop words
         lyric = [i for i in lyric if i not in STOP_WORDS]
+        lyric2 = [i for i in lyric2 if i not in STOP_WORDS]
         # take the most common elements
         # [('没有', 872), ('一个', 675), ('什么', 580)]
         lyric = nltk.FreqDist(lyric).most_common()
-        draw_histogram(lyric[:10], x_desc='The Most Frequent Words', y_desc='Words Frequency', title='Words Frequency')
+        lyric2 = nltk.FreqDist(lyric2).most_common()
+        draw_histogram(lyric[:10], x_desc='The Most Frequent Words', y_desc='Words Frequency', title='Words Frequency', data2=lyric2[:10])
         print(len(lyric))
         # filter somewhat frequency is not very high
         lyric = list(filter(lambda tup: tup[1] > 10, lyric))
