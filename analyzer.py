@@ -24,7 +24,39 @@ STOP_WORDS = {'陈奕迅', 'Eason', 'Chan', 'Eric', '黄伟文', 'Live',
               '让', '多', '又'}
 
 
-def draw_histogram(data: list, x_desc: str, y_desc: str, title: str, data2=None):
+def draw_bar2(data: list, x_desc: str, y_desc: str, title: str, data2=None):
+    """
+        draw histogram based on word frequency
+    :param data: such as [('没有', 872), ('一个', 675), ('什么', 580)]
+    :param x_desc: to describe x axis info
+    :param y_desc: to describe y axis info
+    :param title:
+    :param data2: control group, like as data
+    :return:
+    """
+    # create histogram
+    plt.bar(range(len(data)), [i[1] for i in data],
+            facecolor='#9999ff', edgecolor='white', align='center')
+    plt.bar(range(len(data2)), [-i[1] for i in data2],
+            facecolor='#ff9999', edgecolor='white', align='center')
+
+    # set x axis
+    plt.xticks(range(len(data)), [i[0] for i in data])
+
+    # set x axis desc
+    plt.xlabel(x_desc)
+
+    # set y axis desc
+    plt.ylabel(y_desc)
+
+    # set title
+    plt.title(title)
+
+    # show
+    plt.show()
+
+
+def draw_bar(data: list, x_desc: str, y_desc: str, title: str, data2=None):
     """
         draw histogram based on word frequency
     :param data: such as [('没有', 872), ('一个', 675), ('什么', 580)]
@@ -105,7 +137,7 @@ def analysis():
         # [('没有', 872), ('一个', 675), ('什么', 580)]
         lyric = nltk.FreqDist(lyric).most_common()
         lyric2 = nltk.FreqDist(lyric2).most_common()
-        draw_histogram(lyric[:10], x_desc='The Most Frequent Words', y_desc='Words Frequency', title='Words Frequency', data2=lyric2[:10])
+        draw_bar(lyric[:10], x_desc='The Most Frequent Words', y_desc='Words Frequency', title='Words Frequency', data2=lyric2[:10])
         print(len(lyric))
         # filter somewhat frequency is not very high
         lyric = list(filter(lambda tup: tup[1] > 10, lyric))
