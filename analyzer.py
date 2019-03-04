@@ -36,9 +36,9 @@ def draw_bar2(data: list, x_desc: str, y_desc: str, title: str, data2=None):
     """
     # create histogram
     plt.bar(range(len(data)), [i[1] for i in data],
-            facecolor='#9999ff', edgecolor='white', align='center')
+            facecolor='#9999ff', align='center')
     plt.bar(range(len(data2)), [-i[1] for i in data2],
-            facecolor='#ff9999', edgecolor='white', align='center')
+            facecolor='#ff9999', align='center')
 
     # set x axis
     plt.xticks(range(len(data)), [i[0] for i in data])
