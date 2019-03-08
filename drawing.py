@@ -7,7 +7,6 @@ import turtle
 
 
 def draw():
-    re.compile('')
     pass
 
 
