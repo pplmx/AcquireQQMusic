@@ -9,6 +9,7 @@ import turtle
 def draw():
     # ###########
     # have no mood
+    # continue
     pass
 
 
