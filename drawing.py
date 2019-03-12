@@ -10,6 +10,7 @@ def draw():
     # ###########
     # have no mood
     # continue
+    # for next
     pass
 
 
