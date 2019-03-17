@@ -7,14 +7,6 @@ import turtle
 
 
 def draw():
-    # ###########
-    # have no mood
-    # continue
-    # for next
-    # continue
-    # continue
-    # continue
-    # continue
     pass
 
 
