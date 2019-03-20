@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import nltk
 from wordcloud import WordCloud
 
-# show Chinese word
+# show Chinese word.
 plt.rcParams['font.sans-serif'] = ['SimHei']
 # show plus and minus sign
 plt.rcParams['axes.unicode_minus'] = False
