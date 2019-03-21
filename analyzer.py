@@ -12,7 +12,7 @@ from wordcloud import WordCloud
 
 # show Chinese word.
 plt.rcParams['font.sans-serif'] = ['SimHei']
-# show plus and minus sign
+# show plus and minus sign.
 plt.rcParams['axes.unicode_minus'] = False
 
 # common sign
