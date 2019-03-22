@@ -15,7 +15,7 @@ plt.rcParams['font.sans-serif'] = ['SimHei']
 # show plus and minus sign.
 plt.rcParams['axes.unicode_minus'] = False
 
-# common sign
+# common sign.
 SIGN_PATTERN = r'[\s+.!/_,$%^*()"?<>:;\[\]\']+|[：\-+—=！，；“”|。？、~@#￥%…&*（）{}【】《》]'
 # stop words
 STOP_WORDS = {'陈奕迅', 'Eason', 'Chan', 'Eric', '黄伟文', 'Live',
