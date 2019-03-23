@@ -17,7 +17,7 @@ plt.rcParams['axes.unicode_minus'] = False
 
 # common sign.
 SIGN_PATTERN = r'[\s+.!/_,$%^*()"?<>:;\[\]\']+|[：\-+—=！，；“”|。？、~@#￥%…&*（）{}【】《》]'
-# stop words
+# stop words.
 STOP_WORDS = {'陈奕迅', 'Eason', 'Chan', 'Eric', '黄伟文', 'Live',
               '曲', '词', '的', '在', '了', '是', '都', '也', '这',
               '要', '有', '人', '再', '就', '不', '着', '会', '到',
