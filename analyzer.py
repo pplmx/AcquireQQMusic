@@ -155,7 +155,7 @@ def analysis():
                        height=2160  # 图片的长
                        )
         wc.generate_from_frequencies(dict(lyric))
-        # save wordcloud
+        # save WordCloud
         wc.to_file('Saber1-wc.jpg')
 
 
