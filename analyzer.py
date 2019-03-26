@@ -26,7 +26,7 @@ STOP_WORDS = {'陈奕迅', 'Eason', 'Chan', 'Eric', '黄伟文', 'Live',
 
 def draw_bar2(data: list, x_desc: str, y_desc: str, title: str, data2=None):
     """
-        draw histogram based on word frequency
+        draw histogram based on word frequency.
     :param data: such as [('没有', 872), ('一个', 675), ('什么', 580)]
     :param x_desc: to describe x axis info
     :param y_desc: to describe y axis info
