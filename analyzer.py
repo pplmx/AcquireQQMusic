@@ -120,7 +120,7 @@ def analysis():
         # shortest_segment = viterbi_segment().enableCustomDictionary(
         #     False).enablePlaceRecognize(True).enableOrganizationRecognize(True)
 
-        # N - 最短路径分词(效果好, 对命名实体识别能力强)
+        # N-最短路径分词(效果好, 对命名实体识别能力强)
         # n_short_segment = pyhanlp.JClass('com.hankcs.hanlp.seg.NShort.NShortSegment')
         # n_shortest_segment = n_short_segment().enableCustomDictionary(False).enablePlaceRecognize(
         #     True).enableOrganizationRecognize(True)
