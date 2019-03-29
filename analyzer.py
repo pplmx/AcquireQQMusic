@@ -115,7 +115,7 @@ def analysis():
         # 标准分词
         # pyhanlp.HanLP.segment('你好，欢迎在Python中调用HanLP的API')
 
-        # 最短路径分词(速度快,几倍于 N-最短)
+        # 最短路径分词(速度快,几倍于N-最短)
         # viterbi_segment = pyhanlp.JClass('com.hankcs.hanlp.seg.Viterbi.ViterbiSegment')
         # shortest_segment = viterbi_segment().enableCustomDictionary(
         #     False).enablePlaceRecognize(True).enableOrganizationRecognize(True)
