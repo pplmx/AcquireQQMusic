@@ -108,7 +108,6 @@ def analysis():
         lyric = list(map(lambda x: x[0], lyric))
 
         # HanLP
-
         # 基础分词
         # basic_tokenizer = pyhanlp.JClass("com.hankcs.hanlp.tokenizer.BasicTokenizer")
 
